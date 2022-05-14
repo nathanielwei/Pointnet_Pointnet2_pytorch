@@ -61,16 +61,16 @@ class PartNormalDataset(Dataset):
             # print(os.path.basename(fns))
             for fn in fns:
                 token = (os.path.splitext(os.path.basename(fn))[0])
-                self.meta[item].append(os.path.join(dir_point, token + '.txt'))
-
+                self.meta[item].append(os.path.join(dir_point, token + '.txt')) 
+                # Nate: meta save all pc files for each category, e.g. meta['Chair'] is a list of paths for txt files
         self.datapath = []
-        for item in self.cat:
-            for fn in self.meta[item]:
-                self.datapath.append((item, fn))
+        for item in self.cat: # Nate: iter each category 
+            for fn in self.meta[item]: # Nate: append all paths for each category
+                self.datapath.append((item, fn)) # Nate: e.g. 'Chair', [txt file path] 
 
         self.classes = {}
-        for i in self.cat.keys():
-            self.classes[i] = self.classes_original[i]
+        for i in self.cat.keys(): # Nate:  'Airplane', 'Chair' ...
+            self.classes[i] = self.classes_original[i] # Nate: classes_original is dict. e.g. 'Airplane': 0, ...
 
         # Mapping from category ('Chair') to a list of int [10,11,12,13] as segmentation labels
         self.seg_classes = {'Earphone': [16, 17, 18], 'Motorbike': [30, 31, 32, 33, 34, 35], 'Rocket': [41, 42, 43],
