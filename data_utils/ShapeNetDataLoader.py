@@ -7,10 +7,10 @@ from torch.utils.data import Dataset
 warnings.filterwarnings('ignore')
 
 def pc_normalize(pc):
-    centroid = np.mean(pc, axis=0)
-    pc = pc - centroid
+    centroid = np.mean(pc, axis=0) # Nate: Take x_mean, y_mean, z_mean as centriod
+    pc = pc - centroid # Nate: re-center 
     m = np.max(np.sqrt(np.sum(pc ** 2, axis=1))) # Nate: compute np.sqrt(x^2+y^2+z^2), find the largest one
-    pc = pc / m
+    pc = pc / m # Nate: make every point clould in a ball with radius 1
     return pc
 
 class PartNormalDataset(Dataset):
