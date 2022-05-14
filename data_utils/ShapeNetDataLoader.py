@@ -88,7 +88,7 @@ class PartNormalDataset(Dataset):
 
     def __getitem__(self, index):
         if index in self.cache:
-            point_set, cls, seg = self.cache[index]
+            point_set, cls, seg = self.cache[index] # Nate: cache is a dict: e.g. 0, np.array
         else:
             fn = self.datapath[index]
             cat = self.datapath[index][0]
