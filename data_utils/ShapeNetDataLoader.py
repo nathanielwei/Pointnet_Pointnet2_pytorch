@@ -106,7 +106,7 @@ class PartNormalDataset(Dataset):
 
         choice = np.random.choice(len(seg), self.npoints, replace=True) # Nate: generate [npoints] each value between 0 and len(seg)-1 
         # resample
-        point_set = point_set[choice, :] # Nate e.g. (2500, 3)
+        point_set = point_set[choice, :] # Nate e.g. (2500, 3) the selected points may not be unique
         seg = seg[choice] # Nate e.g. (2500,)
 
         return point_set, cls, seg
