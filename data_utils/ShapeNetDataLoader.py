@@ -15,7 +15,7 @@ def pc_normalize(pc):
 
 class PartNormalDataset(Dataset):
     def __init__(self,root = './data/shapenetcore_partanno_segmentation_benchmark_v0_normal', npoints=2500, split='train', class_choice=None, normal_channel=False):
-        self.npoints = npoints
+        self.npoints = npoints # Nate: in train.py, npoints = 2048; if use --normal in bash file, then normal_channel = True
         self.root = root
         self.catfile = os.path.join(self.root, 'synsetoffset2category.txt')
         self.cat = {}
@@ -98,7 +98,7 @@ class PartNormalDataset(Dataset):
             if not self.normal_channel:
                 point_set = data[:, 0:3] # Nate: use XYZ only
             else:
-                point_set = data[:, 0:6] # Nate: use RGB, then [x,y,z,r,g,b]
+                point_set = data[:, 0:6] # Nate: use XYZ and RGB, then [x,y,z,r,g,b] e.g. when training uses --normal
             seg = data[:, -1].astype(np.int32)
             if len(self.cache) < self.cache_size:
                 self.cache[index] = (point_set, cls, seg) # Nate: their shapes e.g. (2747, 3), (1,) (2747,), respectively
@@ -106,7 +106,7 @@ class PartNormalDataset(Dataset):
 
         choice = np.random.choice(len(seg), self.npoints, replace=True) # Nate: generate [npoints] each value between 0 and len(seg)-1 
         # resample
-        point_set = point_set[choice, :] # Nate e.g. (2500, 3) the selected points may not be unique
+        point_set = point_set[choice, :] # Nate e.g. (2500, 3) the selected points may not be unique, in train.py: (2048, 6) or (2048, 3)
         seg = seg[choice] # Nate e.g. (2500,)
 
         return point_set, cls, seg
