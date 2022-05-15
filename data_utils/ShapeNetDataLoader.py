@@ -94,11 +94,11 @@ class PartNormalDataset(Dataset):
             cat = self.datapath[index][0]
             cls = self.classes[cat]
             cls = np.array([cls]).astype(np.int32)
-            data = np.loadtxt(fn[1]).astype(np.float32)
+            data = np.loadtxt(fn[1]).astype(np.float32) # Nate each col: x,y,z,r,g,b,seg-class
             if not self.normal_channel:
                 point_set = data[:, 0:3]
             else:
-                point_set = data[:, 0:6]
+                point_set = data[:, 0:6] 
             seg = data[:, -1].astype(np.int32)
             if len(self.cache) < self.cache_size:
                 self.cache[index] = (point_set, cls, seg)
