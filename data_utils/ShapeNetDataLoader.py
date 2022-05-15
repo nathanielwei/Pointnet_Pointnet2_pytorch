@@ -101,13 +101,13 @@ class PartNormalDataset(Dataset):
                 point_set = data[:, 0:6] # Nate: use RGB, then [x,y,z,r,g,b]
             seg = data[:, -1].astype(np.int32)
             if len(self.cache) < self.cache_size:
-                self.cache[index] = (point_set, cls, seg)
+                self.cache[index] = (point_set, cls, seg) # Nate: their shapes e.g. (2747, 3), (1,) (2747,), respectively
         point_set[:, 0:3] = pc_normalize(point_set[:, 0:3])
 
         choice = np.random.choice(len(seg), self.npoints, replace=True) # Nate: generate [npoints] each value between 0 and len(seg)-1 
         # resample
-        point_set = point_set[choice, :]
-        seg = seg[choice]
+        point_set = point_set[choice, :] # Nate e.g. (2500, 3)
+        seg = seg[choice] # Nate e.g. (2500,)
 
         return point_set, cls, seg
 
