@@ -183,7 +183,7 @@ def main(args):
         for i, (points, label, target) in tqdm(enumerate(trainDataLoader), total=len(trainDataLoader), smoothing=0.9):
             optimizer.zero_grad()
 
-            points = points.data.numpy()
+            points = points.data.numpy() # e.g. --noraml, then we have XYZ and RGB: [16, 2048, 6] --- bs, npoints, _
             points[:, :, 0:3] = provider.random_scale_point_cloud(points[:, :, 0:3])
             points[:, :, 0:3] = provider.shift_point_cloud(points[:, :, 0:3])
             points = torch.Tensor(points)
