@@ -116,7 +116,7 @@ def main(args):
     shutil.copy('models/pointnet2_utils.py', str(exp_dir))
 
     classifier = MODEL.get_model(num_part, normal_channel=args.normal).cuda()
-    criterion = MODEL.get_loss().cuda()
+    criterion = MODEL.get_loss().cuda() # if model='pointnet2_part_seg_msg', only use "total_loss = F.nll_loss(pred, target)"
     classifier.apply(inplace_relu)
 
     def weights_init(m):
@@ -197,7 +197,7 @@ def main(args):
 
             correct = pred_choice.eq(target.data).cpu().sum() # num of points those are correctly predicted
             mean_correct.append(correct.item() / (args.batch_size * args.npoint))
-            loss = criterion(seg_pred, target, trans_feat)
+            loss = criterion(seg_pred, target, trans_feat) # if model='pointnet2_part_seg_msg', only use "total_loss = F.nll_loss(pred, target)", trans_feat not use
             loss.backward()
             optimizer.step()
 
