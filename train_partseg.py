@@ -189,8 +189,8 @@ def main(args):
             points = torch.Tensor(points)
             points, label, target = points.float().cuda(), label.long().cuda(), target.long().cuda() # p: [B, N, C], l: [B,1], tar: [B, N]
             points = points.transpose(2, 1)
-
-            seg_pred, trans_feat = classifier(points, to_categorical(label, num_classes))
+                                                                                          # e.g. label shows 15, then output entry is [0,0,...,1] if 16 classes
+            seg_pred, trans_feat = classifier(points, to_categorical(label, num_classes)) # to_categorical(label, num_classes)-->[B,1,N_classes]
             seg_pred = seg_pred.contiguous().view(-1, num_part)
             target = target.view(-1, 1)[:, 0]
             pred_choice = seg_pred.data.max(1)[1]
