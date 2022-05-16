@@ -38,7 +38,7 @@ def inplace_relu(m):
 
 def to_categorical(y, num_classes):
     """ 1-hot encodes a tensor """
-    new_y = torch.eye(num_classes)[y.cpu().data.numpy(),]
+    new_y = torch.eye(num_classes)[y.cpu().data.numpy(),]#Nate, make a eye matrix then, use make it to a categorical, only show a class with its one-hot vector
     if (y.is_cuda):
         return new_y.cuda()
     return new_y
