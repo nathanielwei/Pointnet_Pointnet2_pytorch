@@ -20,7 +20,7 @@ from data_utils.ShapeNetDataLoader import PartNormalDataset
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = BASE_DIR
 sys.path.append(os.path.join(ROOT_DIR, 'models'))
-
+# there are 50 parts, see seg_classes, the total num of seg parts is 50, use 0,1,2,...,49 
 seg_classes = {'Earphone': [16, 17, 18], 'Motorbike': [30, 31, 32, 33, 34, 35], 'Rocket': [41, 42, 43],
                'Car': [8, 9, 10, 11], 'Laptop': [28, 29], 'Cap': [6, 7], 'Skateboard': [44, 45, 46], 'Mug': [36, 37],
                'Guitar': [19, 20, 21], 'Bag': [4, 5], 'Lamp': [24, 25, 26, 27], 'Table': [47, 48, 49],
@@ -189,11 +189,11 @@ def main(args):
             points = torch.Tensor(points)
             points, label, target = points.float().cuda(), label.long().cuda(), target.long().cuda() # p: [B, N, C], l: [B,1], tar: [B, N]
             points = points.transpose(2, 1)
-            #seg_pred [B, N, 50] e.g. [16,2048,50], trans_feat [B,1024,1]  # e.g. label shows 15, then output entry is [0,0,...,1] if 16 classes
+            #seg_pred [B, N, num_part] e.g. [16,2048,50], trans_feat [B,1024,1]  # e.g. label shows 15, then output entry is [0,0,...,1] if 16 classes
             seg_pred, trans_feat = classifier(points, to_categorical(label, num_classes)) # to_categorical(label, num_classes)-->[B,1,N_classes]
-            seg_pred = seg_pred.contiguous().view(-1, num_part)
-            target = target.view(-1, 1)[:, 0]
-            pred_choice = seg_pred.data.max(1)[1]
+            seg_pred = seg_pred.contiguous().view(-1, num_part) # [B, N, num_part] --> [B*N, num_part]
+            target = target.view(-1, 1)[:, 0] # shape: torch.Size([B*N]) e.g. torch.Size([32768])
+            pred_choice = seg_pred.data.max(1)[1] # the choice for each points, i.e. which class does this point belong to? Furthermore, shape is torch.Size([B*N]) e.g. torch.Size([32768])
 
             correct = pred_choice.eq(target.data).cpu().sum()
             mean_correct.append(correct.item() / (args.batch_size * args.npoint))
