@@ -195,7 +195,7 @@ def main(args):
             target = target.view(-1, 1)[:, 0] # shape: torch.Size([B*N]) e.g. torch.Size([32768])
             pred_choice = seg_pred.data.max(1)[1] # the choice for each points, i.e. which class does this point belong to? Furthermore, shape is torch.Size([B*N]) e.g. torch.Size([32768])
 
-            correct = pred_choice.eq(target.data).cpu().sum()
+            correct = pred_choice.eq(target.data).cpu().sum() # num of points those are correctly predicted
             mean_correct.append(correct.item() / (args.batch_size * args.npoint))
             loss = criterion(seg_pred, target, trans_feat)
             loss.backward()
