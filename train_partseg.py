@@ -187,7 +187,7 @@ def main(args):
             points[:, :, 0:3] = provider.random_scale_point_cloud(points[:, :, 0:3]) # Nate: scale the points by a multiplier [0.80, 1.25] (item by item)
             points[:, :, 0:3] = provider.shift_point_cloud(points[:, :, 0:3]) # Nate: random shift along x,y,z by a small value
             points = torch.Tensor(points)
-            points, label, target = points.float().cuda(), label.long().cuda(), target.long().cuda()
+            points, label, target = points.float().cuda(), label.long().cuda(), target.long().cuda() # p: [B, N, C], l: [B,1], tar: [B, N]
             points = points.transpose(2, 1)
 
             seg_pred, trans_feat = classifier(points, to_categorical(label, num_classes))
