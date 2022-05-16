@@ -184,7 +184,7 @@ def main(args):
             optimizer.zero_grad()
 
             points = points.data.numpy() # e.g. --noraml, then we have XYZ and RGB: [16, 2048, 6] --- bs, npoints, _
-            points[:, :, 0:3] = provider.random_scale_point_cloud(points[:, :, 0:3])
+            points[:, :, 0:3] = provider.random_scale_point_cloud(points[:, :, 0:3]) # scale the points by a multiplier [0.80, 1.25] (item by item)
             points[:, :, 0:3] = provider.shift_point_cloud(points[:, :, 0:3])
             points = torch.Tensor(points)
             points, label, target = points.float().cuda(), label.long().cuda(), target.long().cuda()
