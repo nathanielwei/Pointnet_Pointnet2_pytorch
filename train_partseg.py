@@ -111,7 +111,7 @@ def main(args):
     num_part = 50
 
     '''MODEL LOADING'''
-    MODEL = importlib.import_module(args.model) # args = Namespace(batch_size=16, decay_rate=0.0001, epoch=251, gpu='1', learning_rate=0.001, log_dir='pointnet2_part_seg_msg', lr_decay=0.5, model='pointnet2_part_seg_msg', normal=True, npoint=2048, optimizer='Adam', step_size=20)
+    MODEL = importlib.import_module(args.model) # args.model --- args = Namespace(batch_size=16, decay_rate=0.0001, epoch=251, gpu='1', learning_rate=0.001, log_dir='pointnet2_part_seg_msg', lr_decay=0.5, model='pointnet2_part_seg_msg', normal=True, npoint=2048, optimizer='Adam', step_size=20)
     shutil.copy('models/%s.py' % args.model, str(exp_dir))
     shutil.copy('models/pointnet2_utils.py', str(exp_dir))
 
